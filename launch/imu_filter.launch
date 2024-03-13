@@ -1,0 +1,8 @@
+<launch>
+    <arg name="pose_config_filepath" default="$(find msd_pose_estimation)/config/pose_config.yaml"/>
+    <node pkg="msd_pose_estimation" type="hardware_state.py" name="raw_sensor_node">
+        <rosparam command="load" file="$(arg pose_config_filepath)"/>
+    </node>
+    
+    <node pkg="imu_filter_madgwick" type="imu_filter_node" name="imu_filter_node"/>
+</launch>
