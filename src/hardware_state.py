@@ -70,7 +70,8 @@ def hardware_state_callback(msg: HardwareState):
     left_motor_pulse_delta = msg.left_motor_pulse_delta
     roll, pitch, yaw = msg.roll, msg.pitch, msg.heading
     acc_x, acc_y, acc_z = msg.acc_x, msg.acc_y, msg.acc_z
-    gyr_x, gyr_y, gyr_z = msg.gyr_x/1000000.0, msg.gyr_y/1000000.0, msg.gyr_z/1000000.0
+    gyr_x, gyr_y, gyr_z = msg.gyr_x, msg.gyr_y, msg.gyr_z
+    mag_x, mag_y, mag_z = msg.mag_x/1000000.0, msg.mag_y/1000000.0, msg.mag_z/1000000.0
 hardware_state_sub = rospy.Subscriber("hardware_state", HardwareState, hardware_state_callback)
 
 try:
