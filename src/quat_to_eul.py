@@ -5,6 +5,7 @@ import rospy
 import tf
 from sensor_msgs.msg import Imu
 from geometry_msgs.msg import Quaternion, Vector3
+import math
 
 # Global Variables
 q_raw = []
@@ -34,8 +35,11 @@ imu_sub = rospy.Subscriber("imu/data", Imu, imu_callback)
 
 try:
     while not rospy.is_shutdown():
-        orientation_raw_msg = Vector3(*tf.transformations.euler_from_quaternion(q_raw))
-        orientation_msg = Vector3(*tf.transformations.euler_from_quaternion(q))        
+        (roll_raw, pitch_raw, yaw_raw) = tf.transformations.euler_from_quaternion(q_raw)
+        (roll, pitch, yaw) = tf.transformations.euler_from_quaternion(q)
+        
+        orientation_raw_msg = Vector3(math.degrees(roll_raw),math.degrees(pitch_raw),math.degrees(yaw_raw))
+        orientation_msg = Vector3(math.degrees(roll),math.degrees(pitch),math.degrees(yaw))        
         
         imu_raw_pub.publish(orientation_raw_msg)
         imu_pub.publish(orientation_msg)
@@ -44,4 +48,3 @@ try:
 except BaseException as e:
     print(e)
     pass
-
