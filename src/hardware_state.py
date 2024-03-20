@@ -86,7 +86,7 @@ def hardware_state_callback(msg: HardwareState):
     left_motor_pulse_delta = msg.left_motor_pulse_delta
     roll, pitch, yaw = np.radians(msg.roll), np.radians(msg.pitch), warpAngle(np.radians(msg.heading)+np.pi/2)
     acc_x, acc_y, acc_z = msg.acc_x, msg.acc_y, msg.acc_z+0.23
-    gyr_x, gyr_y, gyr_z = np.radians(msg.gyr_x), np.radians(msg.gyr_y), np.radians(msg.gyr_z)
+    gyr_x, gyr_y, gyr_z = np.radians(msg.gyr_y), np.radians(msg.gyr_x), np.radians(msg.gyr_z)
     mag_x, mag_y, mag_z = msg.mag_x/1000000.0, msg.mag_y/1000000.0, msg.mag_z/1000000.0
 hardware_state_sub = rospy.Subscriber("hardware_state", HardwareState, hardware_state_callback)
 
@@ -152,7 +152,7 @@ try:
         imu_msg.header.frame_id = "imu"
         imu_msg.orientation = Quaternion(*tf.transformations.quaternion_from_euler(roll_filter, pitch_filter, yaw))
         imu_msg.angular_velocity = Vector3(gyr_filter[0], gyr_filter[1], gyr_filter[2])
-        imu_msg.linear_acceleration = Vector3(acc_filter[0], acc_filter[1], acc_filter[2])
+        imu_msg.linear_acceleration = Vector3(acc_filter[1], acc_filter[0], acc_filter[2])
         imu_pub.publish(imu_msg)
         rate.sleep()
         
