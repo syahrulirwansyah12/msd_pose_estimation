@@ -20,6 +20,7 @@ wheel_radius = rospy.get_param("/raw_sensor/wheel_radius", 2.75)	  # in cm
 wheel_distance = rospy.get_param("/raw_sensor/wheel_distance", 23.0)    # in cm
 gear_ratio = rospy.get_param("/raw_sensor/gear_ratio", 1980.0)
 use_imu = rospy.get_param("/raw_sensor/use_imu", 1)
+az_offset = rospy.get_param("/raw_sensor/az_offset", 0.31)
 
 # Global Variables
 right_motor_pulse_delta = 0
@@ -81,11 +82,11 @@ def rotm_from_eul(r, p, y):
         
 def hardware_state_callback(msg: HardwareState):
     global right_motor_pulse_delta, left_motor_pulse_delta, roll, pitch, yaw, acc_x, acc_y, acc_z, \
-    gyr_x, gyr_y, gyr_z, mag_x, mag_y, mag_z
+    gyr_x, gyr_y, gyr_z, mag_x, mag_y, mag_z, az_offset
     right_motor_pulse_delta = msg.right_motor_pulse_delta
     left_motor_pulse_delta = msg.left_motor_pulse_delta
     roll, pitch, yaw = np.radians(msg.roll), np.radians(msg.pitch), warpAngle(np.radians(msg.heading)+np.pi/2)
-    acc_x, acc_y, acc_z = msg.acc_x, msg.acc_y, msg.acc_z+0.23
+    acc_x, acc_y, acc_z = msg.acc_x, msg.acc_y, msg.acc_z+az_offset
     gyr_x, gyr_y, gyr_z = np.radians(msg.gyr_y), np.radians(msg.gyr_x), np.radians(msg.gyr_z)
     mag_x, mag_y, mag_z = msg.mag_x/1000000.0, msg.mag_y/1000000.0, msg.mag_z/1000000.0
 hardware_state_sub = rospy.Subscriber("hardware_state", HardwareState, hardware_state_callback)
@@ -123,7 +124,7 @@ try:
         rotmax_filter = rotm_from_eul(roll_filter, pitch_filter, 0.0)
         
         acc_filter = np.matmul(rotmax_filter, acc_filter_1)
-        #print(acc_filter, acc_filter_1)      
+        #print(az_offset)      
         
         #Assign odometry msg
         odom_msg.header.stamp = rospy.Time.now() 

@@ -6,3 +6,4 @@ raw_sensor:
   wheel_distance: 23.0      # cm
   gear_ratio: 1980.0
   use_imu: 0                # set to 1 if you are using IMU as heading
+  az_offset: 0.31
