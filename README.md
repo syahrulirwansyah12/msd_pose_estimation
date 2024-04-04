@@ -22,7 +22,7 @@ Overview
 
 ### Launch file
 This stack contains several launch files as follows:
-* `imu_filter.launch` : this launch file corrects the IMU measurement by accounting for the earth's magnetic field and the robot's tilt [[1]]. This uses "imu_filter_madgwick" node from "imu_tools" package and "hardware_state.py" node.
+* `imu_filter.launch` : this launch file corrects the IMU measurement by accounting for the earth's magnetic field and the robot's tilt [[1]]. This uses the "imu_filter_madgwick" node from the "imu_tools" package and the "hardware_state.py" node.
 
 [1]: http://wiki.ros.org/imu_tools
 
@@ -37,7 +37,7 @@ This stack contains several custom nodes as follows:
 * `quat_to_eul.py` : this node can be set to subscribe to the arbitrary topics that contain orientation data in quaternion such as `nav_msgs::Odometry` or `sensor_msgs::Imu`, then this node will convert those quaternions orientation into Euler angles.
 
 ### Visualization
-This stack provides an R-viz config to visualize both "wheel/odom" and "odometry/filtered" topics by simply run:
+This stack provides an R-viz config to visualize both "wheel/odom" and "odometry/filtered" topics by simply running:
 ```bash
-
+rosrun rviz rviz -d ~/catkin_ws/src/msd_pose_estimation/rviz/pose_estimation.rviz
 ```
